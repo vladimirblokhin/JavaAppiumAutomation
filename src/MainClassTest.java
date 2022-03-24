@@ -12,4 +12,9 @@ public class MainClassTest {
 
         Assert.assertEquals("Метод getLocalNumber должен возвращать 14", actual, expected);
     }
+
+    @Test
+    public void testGetClassNumber() {
+        Assert.assertTrue("метод getClassNumber должен возвращать число больше 45", Main.getClassNumber() > 45);
+    }
 }
