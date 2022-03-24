@@ -10,6 +10,6 @@ public class MainClassTest {
         int expected = 14;
         int actual = Main.getLocalNumber();
 
-        Assert.assertTrue("Метод getLocalNumber должен возвращать 14", actual == expected);
+        Assert.assertEquals("Метод getLocalNumber должен возвращать 14", actual, expected);
     }
 }
