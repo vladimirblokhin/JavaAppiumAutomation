@@ -15,6 +15,13 @@ public class MainClassTest {
 
     @Test
     public void testGetClassNumber() {
-        Assert.assertTrue("метод getClassNumber должен возвращать число больше 45", Main.getClassNumber() > 45);
+        Assert.assertTrue("метод getClassNumber должен возвращать число больше 45",
+                Main.getClassNumber() > 45);
+    }
+
+    @Test
+    public void testGetClassString() {
+        Assert.assertTrue("метод getClassString должен возвращать строку содержащую \"Hello\" или \"hello\"",
+                Main.getClassString().contains("Hello") || Main.getClassString().contains("hello"));
     }
 }
