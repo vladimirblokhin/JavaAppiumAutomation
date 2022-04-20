@@ -120,6 +120,23 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testCompareSearchlinePlaceholderText() {
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find search line",
+                15
+        );
+
+        assertElementHaveText(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search Wikipedia",
+                "We see unexpected placeholder text"
+        );
+
+    }
+
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -149,5 +166,16 @@ public class FirstTest {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         wait.withMessage(error_message + "\n");
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+    }
+
+    private void assertElementHaveText (By by, String expected_text, String errorMessage) {
+        WebElement element = waitForElementPresent(by, errorMessage);
+
+        String actual_text = element.getAttribute("text");
+        Assert.assertEquals(
+                errorMessage,
+                expected_text,
+                actual_text
+        );
     }
 }
