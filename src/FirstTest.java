@@ -9,10 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.net.URL;
 
-import static javax.swing.text.html.CSS.getAttribute;
 
 public class FirstTest {
 
@@ -60,27 +58,6 @@ public class FirstTest {
                 By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
                 "Cannot 'find Object-oriented programming language' topic searching by 'Java'",
                 15
-        );
-    }
-
-    @Test
-    public void testCancelSearch() {
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find element to enter search line",
-                5
-        );
-
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot find close button",
-                5
-        );
-
-        waitForElementNotPresent(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "X still present",
-                5
         );
     }
 
@@ -133,6 +110,38 @@ public class FirstTest {
                 By.id("org.wikipedia:id/search_src_text"),
                 "Search Wikipedia",
                 "We see unexpected placeholder text"
+        );
+    }
+
+    @Test
+    public void testCancelSearch() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find element to enter search line",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("search_src_text"),
+                "Java",
+                "Cannot find element to enter search line",
+                5
+        );
+
+        WebElement search_result = driver.findElementById("org.wikipedia:id/search_results_list");
+
+        Assert.assertTrue(search_result.findElements(By.xpath("//*[contains(@class, 'ViewGroup')]")).size() > 1);
+
+        waitForElementAndClick(
+                By.id("search_close_btn"),
+                "Cannot find X",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Search result is still visible",
+                5
         );
 
     }
