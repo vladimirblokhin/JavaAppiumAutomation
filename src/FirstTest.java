@@ -10,6 +10,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URL;
+import java.util.List;
 
 
 public class FirstTest {
@@ -143,8 +144,36 @@ public class FirstTest {
                 "Search result is still visible",
                 5
         );
-
     }
+
+    @Test
+    public void testEachArticleContainsSearchText () {
+        final String input_text = "Java";
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find element to enter search line",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("search_src_text"),
+                input_text,
+                "Cannot find element to enter search line",
+                5
+        );
+
+        List<WebElement> articleTitles =  waitForElementsPresent(
+                By.xpath("//*[contains(@resource-id, 'search_results_list')]//*[contains(@resource-id, 'page_list_item_title')]"),
+                "Cannot find article titles",
+                10
+        );
+
+        for (WebElement articleTitle: articleTitles) {
+            Assert.assertTrue("Cannot find search text in article titles" ,articleTitle.getText().contains(input_text));
+        }
+    }
+
 
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
@@ -154,6 +183,15 @@ public class FirstTest {
                 ExpectedConditions.presenceOfElementLocated(by)
         );
     }
+
+    private List<WebElement> waitForElementsPresent(By by, String errorMessage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(by)
+        );
+    }
+
 
     private WebElement waitForElementPresent(By by, String errorMessage) {
         return waitForElementPresent(by, errorMessage, 5);
