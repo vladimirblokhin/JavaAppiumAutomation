@@ -365,6 +365,34 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testArticleTitlePresentsCheck() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find element to init search",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                "Java",
+                "Cannot find element to enter search line",
+                5
+        );
+
+        String title = "Object-oriented programming language";
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
+                "Cannot find that article",
+                10
+        );
+
+        Assert.assertTrue("Cannot find article title",
+                getAmountOfElements(
+                        By.xpath("//*[@class='TextView'][contains(@text, 'Object-oriented programming language')]")
+                ) > 0);
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
