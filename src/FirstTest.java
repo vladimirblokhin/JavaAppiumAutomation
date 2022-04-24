@@ -1,4 +1,5 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
@@ -402,11 +403,153 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testSaveTwoArticles () {
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find element to init search",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                "Java",
+                "Cannot find element to enter search line",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
+                "Cannot find that article",
+                10
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout']/*[contains(@text, 'Save')]'"),
+                "Cannot find save button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/snackbar_action']"),
+                "Cannot find button 'Ad to List'",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                "Learning Programming",
+                "Cannot find listname input line",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("android:id/button1"),
+                "Cannot find OK button to create list",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@accessibility id = 'Navigate up']"),
+                "Cannot find navigate up button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'High-level programming language')]"),
+                "Cannot find Javascript article",
+                10
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout]/*[contains(@text, 'Save')]'"),
+                "Cannot find save button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/snackbar_action']"),
+                "Cannot find button 'Ad to List'",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath(("//*[@id='org.wikipedia:id/item_title'][contains(@text, 'Learning Programming')]")),
+                "Cannot find list",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@accessibility id = 'Navigate up']"),
+                "Cannot find navigate up button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@id='org.wikipedia:id/search_toolbar']/*[@class='android.widget.ImageButton']"),
+                "Cannot find <- button",
+                10
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@accessibility id = 'Saved']"),
+                "Cannot find 'Saved' button",
+                10
+        );
+
+        waitForElementAndClick(
+                By.xpath("//[*contains(@text, 'Learning Programming')]"),
+                "Cannot find List",
+                10
+        );
+
+        swipeElementToLeft(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title'][contains(@text, 'Java (programming language)')]"),
+                "Cannot find article in list"
+        );
+
+        String title_article_in_list = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "text",
+                "Cannot find title of the second article",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//[*contains(@text, " + title_article_in_list + ")]"),
+                "Cannot find article in List",
+                1
+        );
+
+        String title_saved_article = waitForElementAndGetAttribute(
+                By.xpath("//*[@class='android.widget.TextView'][contains(@text, 'Javascript')]"),
+                "text",
+                "Cannot find title of the second article",
+                5
+        );
+
+        Assert.assertEquals(
+                "Titles are not equals",
+                title_saved_article,
+                title_article_in_list
+        );
+    }
+
+
     private List<WebElement> waitForElementsPresent(By by, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
         return wait.until(
                 ExpectedConditions.presenceOfAllElementsLocatedBy(by)
+        );
+    }
+
+    private MobileElement waitForMobileElementPresent(By by, String errorMessage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return (MobileElement) wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
         );
     }
 
@@ -418,6 +561,12 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, errorMessage, timeout);
         element.click();
         return element;
+    }
+
+    private MobileElement waitForMobileElementAndClick(By by, String errorMessage, long timeout) {
+        MobileElement mobElement = waitForMobileElementPresent(by, errorMessage, timeout);
+        mobElement.click();
+        return mobElement;
     }
 
     private WebElement waitForElementAndSendKeys(By by, String value , String errorMessage, long timeout) {
