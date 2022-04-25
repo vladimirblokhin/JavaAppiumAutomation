@@ -425,10 +425,10 @@ public class FirstTest {
                 10
         );
 
-        waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout']/*[contains(@text, 'Save')]'"),
+        waitForMobileElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout']/*[contains(@text, 'Save')]"),
                 "Cannot find save button",
-                5
+                15
         );
 
         waitForElementAndClick(
@@ -463,7 +463,7 @@ public class FirstTest {
         );
 
         waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout]/*[contains(@text, 'Save')]'"),
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout]/*[contains(@text, 'Save')]"),
                 "Cannot find save button",
                 5
         );
