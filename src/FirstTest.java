@@ -1,4 +1,5 @@
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Assert;
@@ -33,32 +34,17 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testCompareArticleTitle() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find element to init search",
-                5
-        );
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
-                "Java",
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
-                "Cannot find that article",
-                10
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        WebElement title_element = waitForElementPresent(
-                By.xpath("//android.view.View[@content-desc='Java (programming language)']"),
-                "Cannot find article title",
-                15
-        );
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
 
-        String article_title = title_element.getAttribute("content-desc");
+        ArticlePageObject.waitForTitleElement();
+        String article_title =ArticlePageObject.getArticleTitle();
 
         Assert.assertEquals(
                 "We see unexpected title",
@@ -126,36 +112,17 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testSwipeArticle() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find element to init search",
-                5
-        );
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
-                "Java",
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
-                "Cannot find that article",
-                10
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-      /**  waitForElementPresent(
-                By.xpath("//android.view.View[@content-desc='Java (programming language)']"),
-                "Cannot find article title",
-                15
-        ); **/
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
 
-        MainPageObject.swipeUpToFindElement(
-                By.xpath("//android.view.View[@content-desc='View article in browser']/android.widget.TextView"),
-                "Cannot find element ",
-                30
-        );
+        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.swipeToFooter();
     }
 
     @Test
