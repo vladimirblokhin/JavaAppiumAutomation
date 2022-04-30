@@ -153,41 +153,16 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testChangeScreenOrientationOnSearchResults() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find element to init search",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        String search_line = "Java";
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
-                search_line,
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
-                "Cannot find that article",
-                10
-        );
-
-        String title_before_rotation = MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[@class='TextView'][contains(@text, 'Java')]"),
-                "text",
-                "Cannot find title",
-                15
-        );
-
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-
-        String title_after_rotation = MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[@class='TextView'][contains(@text, 'Java')]"),
-                "text",
-                "Cannot find title",
-                15
-        );
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        String title_before_rotation = ArticlePageObject.getArticleTitle();
+        this.rotateScreenLandscape();
+        String title_after_rotation = ArticlePageObject.getArticleTitle();
 
         Assert.assertEquals(
                 "Titles before and after rotation are not equals",
@@ -195,14 +170,9 @@ public class FirstTest extends CoreTestCase {
                 title_after_rotation
         );
 
-        driver.rotate(ScreenOrientation.PORTRAIT);
+        this.rotateScreenPortrait();
 
-        String title_after_second_rotation = MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[@class='TextView'][contains(@text, 'Java')]"),
-                "text",
-                "Cannot find title",
-                15
-        );
+        String title_after_second_rotation = ArticlePageObject.getArticleTitle();
 
         Assert.assertEquals(
                 "Titles before and after rotation are not equals",
@@ -213,32 +183,13 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testCheckSearchArticleInBackground() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find element to init search",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
-                "Java",
-                "Cannot find element to enter search line",
-                5
-        );
-
-        waitForElementPresent(
-                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
-                "Cannot find that article",
-                10
-        );
-
-        driver.runAppInBackground(2);
-
-        waitForElementPresent(
-                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
-                "Cannot find article after returning from background",
-                10
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
+        this.backgroundApp(2);
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
     }
 
     @Test
