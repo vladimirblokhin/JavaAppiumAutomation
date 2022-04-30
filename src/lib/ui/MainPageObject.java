@@ -27,6 +27,14 @@ public class MainPageObject {
         );
     }
 
+    public List<WebElement> waitForElementsNotPresent(List elements, String errorMessage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return (List<WebElement>) wait.until(
+                ExpectedConditions.invisibilityOfAllElements(elements)
+        );
+    }
+
     public WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");

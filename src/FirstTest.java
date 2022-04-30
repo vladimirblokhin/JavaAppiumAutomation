@@ -85,34 +85,15 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testCancelSearch() {
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find element to enter search line",
-                5
-        );
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("search_src_text"),
-                "Java",
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        WebElement search_result = driver.findElementById("org.wikipedia:id/search_results_list");
-
-        Assert.assertTrue(search_result.findElements(By.xpath("//*[contains(@class, 'ViewGroup')]")).size() > 1);
-
-        MainPageObject.waitForElementAndClick(
-                By.id("search_close_btn"),
-                "Cannot find X",
-                5
-        );
-
-        MainPageObject.waitForElementNotPresent(
-                By.id("org.wikipedia:id/search_results_list"),
-                "Search result is still visible",
-                5
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        Assert.assertTrue(SearchPageObject.areThereMoreSearchResultsThanX(1));
+        SearchPageObject.waitForCancelButtonToAppear();
+        SearchPageObject.clickSearchCancelButton();
+        SearchPageObject.waitDisappearResultsAfterCancelingTheSearch();
     }
 
     @Test
