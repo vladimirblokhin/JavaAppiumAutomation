@@ -14,6 +14,8 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_CANCEL_BUTTON = "search_close_btn",
             SEARCH_RESULT_LIST = "org.wikipedia:id/search_results_list",
             SEARCH_RESULTS = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[contains(@class, 'ViewGroup')]",
+            SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']",
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[contains(@text, 'No results')]",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[contains(@text, '{SUBSTRING}')]";
 
 
@@ -82,5 +84,27 @@ public class SearchPageObject extends MainPageObject {
         this.waitForElementAndClick(By.xpath(search_result_xpath),
                 "Cannot find and click search result with substring " + substring,
                 10);
+    }
+
+    public int getAmountOfArticles() {
+        waitForElementPresent(
+                By.xpath(SEARCH_RESULT_ELEMENT),
+                "Cannot find anything by search " ,
+                15
+        );
+        return this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
+    }
+
+    public void waitForEmptyResultLabel() {
+        this.waitForElementPresent(
+                By.xpath(SEARCH_EMPTY_RESULT_ELEMENT),
+                "Cannot find empty result element",
+                15
+        );
+    }
+
+    public void assertThereIsNoResultOfSearch() {
+        this.assertElementNotFound(By.xpath(SEARCH_RESULT_ELEMENT),
+                "We supposed not to find any results");
     }
 }
