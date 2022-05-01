@@ -13,7 +13,7 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_INPUT = "//*[@resource-id='org.wikipedia:id/search_src_text']",
             SEARCH_CANCEL_BUTTON = "search_close_btn",
             SEARCH_RESULT_LIST = "org.wikipedia:id/search_results_list",
-            SEARCH_RESULTS = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[contains(@class, 'ViewGroup')]",
+            SEARCH_RESULTS = "//*[contains(@resource-id, 'search_results_list')]//*[contains(@resource-id, 'page_list_item_title')]",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']",
             SEARCH_EMPTY_RESULT_ELEMENT = "//*[contains(@text, 'No results')]",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[contains(@text, '{SUBSTRING}')]";
@@ -112,5 +112,13 @@ public class SearchPageObject extends MainPageObject {
         this.assertElementHaveText(By.xpath(SEARCH_INPUT),
                 expected_text,
                 "We see unexpected placeholder text");
+    }
+
+    public List<WebElement> getSearchResults () {
+       List results = this.waitForElementsPresent(By.xpath(SEARCH_RESULTS),
+                "Cannot find article titles",
+                10);
+
+       return results;
     }
 }

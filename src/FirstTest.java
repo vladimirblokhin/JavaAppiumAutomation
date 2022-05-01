@@ -75,24 +75,12 @@ public class FirstTest extends CoreTestCase {
     public void testEachArticleContainsSearchText () {
         final String input_text = "Java";
 
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("search_src_text"),
-                input_text,
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(input_text);
 
-        List<WebElement> articleTitles =  MainPageObject.waitForElementsPresent(
-                By.xpath("//*[contains(@resource-id, 'search_results_list')]//*[contains(@resource-id, 'page_list_item_title')]"),
-                "Cannot find article titles",
-                10
-        );
+        List<WebElement> articleTitles = SearchPageObject.getSearchResults();
 
         for (WebElement articleTitle: articleTitles) {
             assertTrue("Cannot find search text in article titles" ,articleTitle.getText().contains(input_text));
