@@ -2,13 +2,9 @@ import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
-import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 
@@ -46,7 +42,7 @@ public class FirstTest extends CoreTestCase {
         ArticlePageObject.waitForTitleElement();
         String article_title =ArticlePageObject.getArticleTitle();
 
-        Assert.assertEquals(
+        assertEquals(
                 "We see unexpected title",
                 "Java (programming language)",
                 article_title
@@ -56,17 +52,10 @@ public class FirstTest extends CoreTestCase {
     @Test
     public void testCompareSearchlinePlaceholderText() {
 
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find search line",
-                15
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.assertElementHaveText(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Search Wikipedia",
-                "We see unexpected placeholder text"
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.assertThereIsPlaceHolderTextInSearchLine("Search Wikipedia");
     }
 
     @Test
@@ -76,7 +65,7 @@ public class FirstTest extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        Assert.assertTrue(SearchPageObject.areThereMoreSearchResultsThanX(1));
+        assertTrue(SearchPageObject.areThereMoreSearchResultsThanX(1));
         SearchPageObject.waitForCancelButtonToAppear();
         SearchPageObject.clickSearchCancelButton();
         SearchPageObject.waitDisappearResultsAfterCancelingTheSearch();
@@ -106,7 +95,7 @@ public class FirstTest extends CoreTestCase {
         );
 
         for (WebElement articleTitle: articleTitles) {
-            Assert.assertTrue("Cannot find search text in article titles" ,articleTitle.getText().contains(input_text));
+            assertTrue("Cannot find search text in article titles" ,articleTitle.getText().contains(input_text));
         }
     }
 
@@ -134,7 +123,7 @@ public class FirstTest extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_line);
         int amount_of_search_result = SearchPageObject.getAmountOfArticles();
 
-        Assert.assertTrue(
+        assertTrue(
                 "We found too few results",
                 amount_of_search_result > 0
         );
@@ -164,7 +153,7 @@ public class FirstTest extends CoreTestCase {
         this.rotateScreenLandscape();
         String title_after_rotation = ArticlePageObject.getArticleTitle();
 
-        Assert.assertEquals(
+        assertEquals(
                 "Titles before and after rotation are not equals",
                 title_before_rotation,
                 title_after_rotation
@@ -174,7 +163,7 @@ public class FirstTest extends CoreTestCase {
 
         String title_after_second_rotation = ArticlePageObject.getArticleTitle();
 
-        Assert.assertEquals(
+        assertEquals(
                 "Titles before and after rotation are not equals",
                 title_after_rotation,
                 title_after_second_rotation
@@ -214,19 +203,13 @@ public class FirstTest extends CoreTestCase {
                 10
         );
 
-        Assert.assertTrue("Cannot find article title",
+        assertTrue("Cannot find article title",
                 MainPageObject.getAmountOfElements(
                         By.xpath("//*[@class='TextView'][contains(@text, 'Object-oriented programming language')]")
                 ) > 0);
     }
 
-    private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(errorMessage + "\n");
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
+
 
     @Test
     public void testSaveTwoArticles () {
@@ -346,7 +329,7 @@ public class FirstTest extends CoreTestCase {
                 "Cannot find article in list"
         );
 
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title'][contains(@text, 'JavaScript')]"),
                 "Cannot find title of the second article",
                 15
@@ -378,7 +361,7 @@ public class FirstTest extends CoreTestCase {
                 15
         );
 
-        Assert.assertEquals(
+        assertEquals(
                 "Titles are not equals",
                 title_saved_article,
                 title_article_in_list

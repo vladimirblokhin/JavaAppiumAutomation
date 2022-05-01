@@ -107,4 +107,10 @@ public class SearchPageObject extends MainPageObject {
         this.assertElementNotFound(By.xpath(SEARCH_RESULT_ELEMENT),
                 "We supposed not to find any results");
     }
+
+    public void assertThereIsPlaceHolderTextInSearchLine(String expected_text) {
+        this.assertElementHaveText(By.xpath(SEARCH_INPUT),
+                expected_text,
+                "We see unexpected placeholder text");
+    }
 }
