@@ -171,30 +171,15 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testArticleTitlePresentsCheck() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find element to init search",
-                5
-        );
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
-                "Java",
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
         String title = "Object-oriented programming language";
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
-                "Cannot find that article",
-                10
-        );
-
-        assertTrue("Cannot find article title",
-                MainPageObject.getAmountOfElements(
-                        By.xpath("//*[@class='TextView'][contains(@text, 'Object-oriented programming language')]")
-                ) > 0);
+        SearchPageObject.clickByArticleWithSubstring(title);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.checkingArticleTitlePresentWithoutWaiting();
     }
 
 

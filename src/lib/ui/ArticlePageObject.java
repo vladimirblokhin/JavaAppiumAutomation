@@ -4,6 +4,8 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import static junit.framework.TestCase.assertTrue;
+
 public class ArticlePageObject extends MainPageObject {
 
     public ArticlePageObject(AppiumDriver driver){
@@ -27,4 +29,11 @@ public class ArticlePageObject extends MainPageObject {
                 "Cannot find the end of article",
                 30);
     }
+
+    public void checkingArticleTitlePresentWithoutWaiting() {
+        this.waitForElementPresent(By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
+                "Cannot find title article without waiting",
+                0);
+    }
+
 }
