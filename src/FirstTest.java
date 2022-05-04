@@ -1,12 +1,8 @@
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import java.util.List;
-
 
 public class FirstTest extends CoreTestCase {
 
@@ -139,6 +135,7 @@ public class FirstTest extends CoreTestCase {
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
         String title_before_rotation = ArticlePageObject.getArticleTitle();
         this.rotateScreenLandscape();
+        this.hideKeyboard();
         String title_after_rotation = ArticlePageObject.getArticleTitle();
 
         assertEquals(
@@ -182,162 +179,43 @@ public class FirstTest extends CoreTestCase {
         ArticlePageObject.checkingArticleTitlePresentWithoutWaiting();
     }
 
-
-
     @Test
     public void testSaveTwoArticles () {
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find element to init search",
-                5
-        );
+        String list_name = "Learning Programming",
+                substring_of_first_article = "Object-oriented programming language",
+                substring_of_second_article = "High-level programming language";
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
-                "Java",
-                "Cannot find element to enter search line",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        NavigationUI NavigationUI = new NavigationUI(driver);
+        ListsPageObject ListsPageObject = new ListsPageObject(driver);
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
-                "Cannot find that article",
-                10
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring(substring_of_first_article);
 
-        MainPageObject.waitForMobileElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout']/*[contains(@text, 'Save')]"),
-                "Cannot find save button",
-                15
-        );
+        ArticlePageObject.addArticleToNewList(list_name);
+        NavigationUI.backToSearchResults();
 
-        MainPageObject.waitForMobileElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout']/*[contains(@text, 'Save')]"),
-                "Cannot find save button",
-                15
-        );
+        SearchPageObject.clickByArticleWithSubstring(substring_of_second_article);
+        String article_title = ArticlePageObject.getArticleTitle();
+        ArticlePageObject.addArticleToExistingList();
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/snackbar_action']"),
-                "Cannot find button 'Ad to List'",
-                5
-        );
+        NavigationUI.backToSearchResults();
+        NavigationUI.backToStartPage();
+        NavigationUI.moveToListsPage();
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/text_input"),
-                "Learning Programming",
-                "Cannot find listname input line",
-                5
-        );
+        ListsPageObject.openListByName(list_name);
+        ListsPageObject.deleteArticleWithSwipe("Java (programming language)");
 
-        MainPageObject.waitForElementAndClick(
-                By.id("android:id/button1"),
-                "Cannot find OK button to create list",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@content-desc = 'Navigate up']"),
-                "Cannot find navigate up button",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'High-level programming language')]"),
-                "Cannot find Javascript article",
-                10
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout']/*[contains(@text, 'Save')]"),
-                "Cannot find save button",
-                15
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_actions_tab_layout']/*[contains(@text, 'Save')]"),
-                "Cannot find save button",
-                15
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/snackbar_action']"),
-                "Cannot find button 'Ad to List'",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath(("//*[@resource-id='org.wikipedia:id/item_title'][contains(@text, 'Learning Programming')]")),
-                "Cannot find list",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@content-desc = 'Navigate up']"),
-                "Cannot find navigate up button",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']/android.widget.ImageButton"),
-                "Cannot find <- button",
-                10
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@content-desc = 'Saved']"),
-                "Cannot find 'Saved' button",
-                10
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Learning Programming')]"),
-                "Cannot find List",
-                15
-        );
-
-        MainPageObject.swipeElementToLeft(
-                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title'][contains(@text, 'Java (programming language)')]"),
-                "Cannot find article in list"
-        );
-
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title'][contains(@text, 'JavaScript')]"),
-                "Cannot find title of the second article",
-                15
-        );
-
-        String title_article_in_list = MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title'][contains(@text, 'JavaScript')]"),
-                "text",
-                "Cannot find title of the second article",
-                15
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'High-level programming language')]"),
-                "Cannot find article in List",
-                15
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'High-level programming language')]"),
-                "Cannot find article in List",
-                25
-        );
-
-        String title_saved_article = MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[contains(@text, 'JavaScript')]"),
-                "text",
-                "Cannot find title inside of the second article",
-                15
-        );
+        ListsPageObject.clickByArticleWithSubstring(substring_of_second_article);
+        String title_saved_article = ArticlePageObject.getArticleTitle();
 
         assertEquals(
                 "Titles are not equals",
                 title_saved_article,
-                title_article_in_list
+                article_title
         );
     }
 }
