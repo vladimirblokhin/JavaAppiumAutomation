@@ -3,12 +3,16 @@ package lib.ui;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 import java.util.List;
 
 
@@ -99,9 +103,9 @@ public class MainPageObject {
 
 
         action
-                .press(x, start_y)
-                .waitAction(timeOfSwipe)
-                .moveTo(x, end_y)
+                .press(PointOption.point(x, start_y))
+                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(timeOfSwipe)))
+                .moveTo(PointOption.point(x, end_y))
                 .release()
                 .perform();
     }
@@ -140,9 +144,9 @@ public class MainPageObject {
 
         TouchAction action = new TouchAction(driver);
         action
-                .press(right_x, middle_y)
-                .waitAction(150)
-                .moveTo(left_x, middle_y)
+                .press(PointOption.point(right_x, middle_y))
+                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(150)))
+                .moveTo(PointOption.point(left_x, middle_y))
                 .release()
                 .perform();
     }
@@ -166,4 +170,3 @@ public class MainPageObject {
         return element.getAttribute(attribute);
     }
 }
-
