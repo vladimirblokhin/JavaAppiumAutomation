@@ -5,6 +5,9 @@ import lib.ui.ArticlePageObject;
 import lib.ui.ListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.NavigationUIFactory;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
@@ -15,9 +18,9 @@ public class MyListsTests extends CoreTestCase {
                 substring_of_first_article = "Object-oriented programming language",
                 substring_of_second_article = "High-level programming language";
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         ListsPageObject ListsPageObject = new ListsPageObject(driver);
 
         SearchPageObject.initSearchInput();

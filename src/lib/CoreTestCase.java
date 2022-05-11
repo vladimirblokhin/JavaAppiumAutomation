@@ -18,8 +18,7 @@ public class CoreTestCase extends TestCase {
     protected void setUp() throws Exception {
 
         super.setUp();
-        this.Platform = new Platform();
-        driver = this.Platform.getDriver();
+        driver = Platform.getInstance().getDriver();
         this.rotateScreenPortrait();
 
         WebElement skip_button = driver.findElementById("fragment_onboarding_skip_button");
