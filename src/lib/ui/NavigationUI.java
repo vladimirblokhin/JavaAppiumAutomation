@@ -1,14 +1,13 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 
-public class NavigationUI extends MainPageObject{
+abstract public class NavigationUI extends MainPageObject{
 
-    public static final String
-            RETURN_BUTTON = "//*[@resource-id='org.wikipedia:id/search_toolbar']/android.widget.ImageButton",
-            NAVIGATE_UP = "//*[@content-desc = 'Navigate up']",
-            SAVED_BUTTON = "//*[@content-desc = 'Saved']";
+    protected static String
+            RETURN_BUTTON,
+            NAVIGATE_UP,
+            SAVED_BUTTON;
 
     public NavigationUI(AppiumDriver driver) {
         super(driver);
@@ -16,7 +15,7 @@ public class NavigationUI extends MainPageObject{
 
     public void backToSearchResults() {
         this.waitForElementAndClick(
-                By.xpath(NAVIGATE_UP),
+                NAVIGATE_UP,
                 "Cannot find navigate up button",
                 5
         );
@@ -24,7 +23,7 @@ public class NavigationUI extends MainPageObject{
 
     public void backToStartPage() {
         this.waitForElementAndClick(
-                By.xpath(RETURN_BUTTON),
+                RETURN_BUTTON,
                 "Cannot find <- button",
                 10
         );
@@ -32,7 +31,7 @@ public class NavigationUI extends MainPageObject{
 
     public void moveToListsPage() {
         this.waitForElementAndClick(
-                By.xpath(SAVED_BUTTON),
+                SAVED_BUTTON,
                 "Cannot find 'Saved' button",
                 15
         );
