@@ -1,6 +1,5 @@
 package lib.ui;
 
- //import org.openqa.selenium.Platform;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -14,7 +13,9 @@ abstract public class ArticlePageObject extends MainPageObject {
             LIST_NAME_INPUT,
             OK_BUTTON,
             LIST_NAME,
-            ARTICLE_TITLE;
+            ARTICLE_TITLE,
+            OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            OPTIONS_REMOVE_FROM_MY_LIST_BUTTON;
 
     public ArticlePageObject(RemoteWebDriver driver){
         super(driver);
@@ -112,5 +113,28 @@ abstract public class ArticlePageObject extends MainPageObject {
                 "Cannot find list",
                 5
         );
+    }
+
+    public void addArticleToMySaved() {
+        if (Platform.getInstance().isMW()) {
+            this.removeArticleFromSavedIfItAdded();
+        }
+        this.waitForElementAndClick(
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                "Cannot find option to add article to reading list",
+                15);
+    }
+
+    public void removeArticleFromSavedIfItAdded() {
+        if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)) {
+            this.waitForElementAndClick(
+                    OPTIONS_REMOVE_FROM_MY_LIST_BUTTON,
+                    "Cannot click button to remove an article from saved",
+                    5);
+        }
+        this.waitForElementPresent(
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                "Cannot find button to add an article to saved list after removing it from this list before",
+                5);
     }
 }
