@@ -1,10 +1,9 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+ //import org.openqa.selenium.Platform;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.rmi.Remote;
 
 abstract public class ArticlePageObject extends MainPageObject {
 
@@ -29,14 +28,25 @@ abstract public class ArticlePageObject extends MainPageObject {
 
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        if (Platform.getInstance().isAndroid()) {
+            return title_element.getAttribute("text");
+        } else {
+            return title_element.getText();
+        }
     }
 
     public void swipeToFooter() {
-        this.swipeUpToFindElement(
-                FOOTER,
-                "Cannot find the end of article",
-                30);
+        if (Platform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(
+                    FOOTER,
+                    "Cannot find the end of article",
+                    30);
+        } else {
+            this.scrollWebPageTilElementNotVisible(
+                    FOOTER,
+                    "Cannot find footer",
+                    40);
+        }
     }
 
     public void checkingArticleTitlePresentWithoutWaiting() {

@@ -5,10 +5,11 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Platform;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -117,6 +118,30 @@ public class MainPageObject {
         swipeUp(200);
     }
 
+    public void scrollWebPageUp() {
+        if (Platform.getInstance().isMW()) {
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
+            JSExecutor.executeScript("window.scrollBy(0, 250)");
+        } else {
+            System.out.println("method scrollWebPageUp does nothing to platform "
+                    + Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    public void scrollWebPageTilElementNotVisible(String locator, String error_message, int max_swipes) {
+        int already_swiped = 0;
+
+        WebElement element = this.waitForElementPresent(locator, error_message);
+
+        while (!this.isElementLocatedOnTheScreen(locator)){
+            scrollWebPageUp();
+            ++already_swiped;
+            if (already_swiped > max_swipes) {
+                Assert.assertTrue(error_message, element.isDisplayed());
+            }
+        }
+    }
+
     public void swipeUpToFindElement(String locator, String errorMessage, int maxSwipes) {
         By by = this.getLocatorString(locator);
         int alreadySwiped = 0;
@@ -188,5 +213,16 @@ public class MainPageObject {
         } else {
             throw new IllegalArgumentException("Cannot get type of locator. Locator: " + locator_with_type);
         }
+    }
+
+    public boolean isElementLocatedOnTheScreen(String locator) {
+        int element_location_by_y = this.waitForElementPresent(locator, "Cannot find element by locator", 15).getLocation().getY();
+        if (Platform.getInstance().isMW()) {
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
+            Object js_result = JSExecutor.executeScript("return window.pageYOffset");
+            element_location_by_y -= Integer.parseInt(js_result.toString());
+        }
+        int screen_size_by_y = driver.manage().window().getSize().getHeight();
+        return element_location_by_y < screen_size_by_y;
     }
 }
