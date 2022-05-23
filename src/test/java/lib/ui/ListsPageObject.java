@@ -1,12 +1,13 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class ListsPageObject  extends MainPageObject{
 
-    public static final String
-            LIST_BY_NAME_TPL = "xpath://*[contains(@text, '{LIST_NAME}')]",
-            ARTICLE_TITLE_SUBSTRING_TPL = "xpath://*[contains(@text, '{SUBSTRING}')]";
+    protected static String
+            LIST_BY_NAME_TPL,
+            ARTICLE_TITLE_SUBSTRING_TPL;
 
     private static String getListXPathByName(String list_name) {
         return LIST_BY_NAME_TPL.replace("{LIST_NAME}", list_name);
@@ -16,7 +17,7 @@ public class ListsPageObject  extends MainPageObject{
         return ARTICLE_TITLE_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
 
-    public ListsPageObject(AppiumDriver driver) {
+    public ListsPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 

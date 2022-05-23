@@ -1,7 +1,7 @@
 package lib.ui.android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.NavigationUI;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AndroidNavigationUI extends NavigationUI {
 
@@ -11,7 +11,7 @@ public class AndroidNavigationUI extends NavigationUI {
         SAVED_BUTTON = "xpath://*[@content-desc = 'Saved']";
     }
 
-    public AndroidNavigationUI(AppiumDriver driver){
+    public AndroidNavigationUI(RemoteWebDriver driver){
         super(driver);
     }
 }
