@@ -10,6 +10,10 @@ import org.junit.Test;
 public class ChangeAppConditionTest extends CoreTestCase {
     @Test
     public void testCheckSearchArticleInBackground() {
+        if (Platform.isMW()) {
+            return;
+        }
+
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
@@ -21,6 +25,10 @@ public class ChangeAppConditionTest extends CoreTestCase {
 
     @Test
     public void testChangeScreenOrientationOnSearchResults() {
+        if (Platform.isMW()) {
+            return;
+        }
+
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();

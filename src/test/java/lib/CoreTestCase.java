@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import junit.framework.TestCase;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.time.Duration;
 
@@ -11,7 +12,7 @@ public class CoreTestCase extends TestCase {
 
     protected Platform Platform;
 
-    protected AppiumDriver driver;
+    protected RemoteWebDriver driver;
     private static String AppiumURL = "http://127.0.0.1:4723/wd/hub";
 
     @Override
@@ -20,9 +21,8 @@ public class CoreTestCase extends TestCase {
         super.setUp();
         driver = Platform.getInstance().getDriver();
         this.rotateScreenPortrait();
-
-        WebElement skip_button = driver.findElementById("fragment_onboarding_skip_button");
-        skip_button.click();
+        this.openWikiWebPageForMobileWeb();
+        this.skipWelcomePageForAndroid();
     }
 
     @Override
@@ -33,16 +33,53 @@ public class CoreTestCase extends TestCase {
     }
 
     protected void rotateScreenPortrait() {
-        driver.rotate(ScreenOrientation.PORTRAIT);
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.rotate(ScreenOrientation.PORTRAIT);
+        } else {
+            System.out.println("Method rotateScreenPortrait does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     protected void rotateScreenLandscape() {
-        driver.rotate(ScreenOrientation.LANDSCAPE);
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.rotate(ScreenOrientation.LANDSCAPE);
+        } else {
+            System.out.println("Method rotateScreenPortrait does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     protected void backgroundApp(int seconds) {
-        driver.runAppInBackground(Duration.ofSeconds(seconds));
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.runAppInBackground(Duration.ofSeconds(seconds));
+        } else {
+            System.out.println("Method backgroundApp does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
-    protected void hideKeyboard() {driver.hideKeyboard();}
+    protected void openWikiWebPageForMobileWeb() {
+        if (Platform.getInstance().isMW()) {
+            driver.get("https://en.m.wikipedia.org");
+        } else {
+            System.out.println("method openWikiWebPageForMobileWeb do nothing to platform " +Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    private void skipWelcomePageForAndroid() {
+        if (lib.Platform.getInstance().isAndroid()) {
+            WebElement skip_button = driver.findElementById("fragment_onboarding_skip_button");
+            skip_button.click();
+        }
+    }
+
+    protected void hideKeyboard() {
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.hideKeyboard();
+        } else {
+            System.out.println("Method hideKeyboard does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
+    }
 }
